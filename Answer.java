@@ -68,15 +68,26 @@ public class Answer {
     public static int calculateScore(String name)
     {
         int sum = 0;
-        for (int i = 0; i < name.length(); i++) {
-            char c = name.charAt(i);
+        for (char c : name.toCharArray()) {
             sum = sum + (c - 'a' + 1);
         }
         return sum;
     }
     
-    public static int calculateLexi(String name1, String name2)
+    public static int calculateLexi(String s1, String s2)
     {
-        return name1.compareTo(name2);
+        //return name1.compareTo(name2);
+                int ls1 = s1.length();
+                int ls2 = s2.length();
+                int len = ls1 > ls2 ? ls2 : ls1;
+                for(int i = 0; i < len; i++){
+                    int lexcompare1 = s1.charAt(i);
+                    int lexcompare2 = s2.charAt(i);
+                    if(lexcompare2 > lexcompare1) {
+                        return 1;
+                    } else if (lexcompare1 > lexcompare2) {
+                        return -1;
+                    }
+                }
     }
 }
