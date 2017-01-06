@@ -1,21 +1,7 @@
-mem_graphs = {}
+#mem_graphs = {}
 mem_counts = {}
 mem_choose = {}
 
-def possible_graphs(n, k):
-    """
-    Returns the total number of graphs with that can be formed using
-    n nodes and k vertices. This includes graphs that are
-    identical for undirected labelled graphs, as well as
-    unconnected graphs.
-    This function effectively returns the number of ways you can
-    choose k vertices out of the 'n choose 2' possible choices.
-    """
-    if (n, k) not in mem_graphs:
-        mem_graphs[(n, k)] = choose(n * (n - 1) >> 1, k)
-
-    return mem_graphs[(n, k)]
-    
 def memoize(f):
     
     class memodict(dict):
@@ -27,6 +13,20 @@ def memoize(f):
             ret = self[key] = self.f(*key)
             return ret
     return memodict(f)
+
+#@memoize  
+#def possible_graphs(n, k):
+    """
+    Returns the total number of graphs with that can be formed using
+    n nodes and k vertices. This includes graphs that are
+    identical for undirected labelled graphs, as well as
+    unconnected graphs.
+    This function effectively returns the number of ways you can
+    choose k vertices out of the 'n choose 2' possible choices.
+    """
+#    return choose(n * (n - 1) >> 1, k)
+    
+
 
 @memoize    
 def choose(n, k):
@@ -43,12 +43,9 @@ def choose(n, k):
         return ntok // ktok
     else:
         return 0
-   
-def count(n, k):
 
-    if (n, k) in mem_counts:
-        # memoized
-        return mem_counts[(n, k)]
+@memoize   
+def count(n, k):
 
     if k == n - 1:
         # Cayley's formula
@@ -81,9 +78,8 @@ def count(n, k):
 
                     for j in range(i - 1, y + 1):
                         # exclude invalid graphs from the total
-                        c -= x * possible_graphs(n - i, k - j) * count(i, j)
+                        c -= x * choose((n - i) * ((n - i) - 1) >> 1, (k - j)) * count(i, j)
 
-    mem_counts[(n, k)] = c
     return c
         
 def answer(n, k):
